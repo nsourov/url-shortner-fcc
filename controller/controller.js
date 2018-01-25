@@ -39,8 +39,9 @@ const urlToShort = (req, res) => {
 
 const shortenedUrl = (req, res) => {
   const { shortened_url } = req.params;
+  console.log({"a": shortened_url})
   const short_url = `https://short-url-mic-fcc.herokuapp.com/${shortened_url}`;
-  console.log(short_url)
+  console.log({"b": short_url})
   UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
     if (err) {
       res.json(err);
