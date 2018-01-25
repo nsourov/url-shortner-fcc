@@ -13,5 +13,5 @@ mongoose.connect(
     process.env.MONGODB_URI,
     () => console.log("DB Running")
 );
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use('/', router)
