@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const UrlToShort = require("../models/short_url");
 
-const urlToShort = (req, res) => {
+const urlToShort = (req, res, next) => {
   const {urlToShort} = req.params;
   const regexForCheckValidUrl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   if (regexForCheckValidUrl.test(urlToShort)) {
@@ -35,18 +35,20 @@ const urlToShort = (req, res) => {
   } else {
     res.json({ error: "invalid url" });
   }
+  next()
 };
 
-const shortenedUrl = async (req, res) => {
-  const { urlToForward } = await req.params;
+const shortenedUrl = (req, res,next) => {
+  const { urlToForward } = req.params;
   console.log(req.params)
   const short_url = `https://short-url-mic-fcc.herokuapp.com/${urlToForward}`;
- await UrlToShort.findOne({ 'shortened_url': short_url }, (err, data) => {
+  UrlToShort.findOne({ 'shortened_url': short_url }, (err, data) => {
     if (err) {
       res.json(err);
     }
    res.redirect(301, data.original_url);
   });
+  next()
 };
 
 module.exports = {urlToShort, shortenedUrl}
