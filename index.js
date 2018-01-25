@@ -10,7 +10,7 @@ require("dotenv").config();
 app.listen(process.env.PORT || 3000, () => console.log("Server running"));
 mongoose.Promise = global.Promise;
 mongoose.connect(
-    process.env.MONGODB_URI || "mongodb://localhost/url-shortner",
+    process.env.MONGODB_URI,
     () => console.log("DB Running")
 );
 
