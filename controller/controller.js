@@ -32,6 +32,7 @@ const urlToShort = (req, res, next) => {
         shortened_url: url.shortened_url
       };
       res.json(objModel);
+      console.log(objModel.shortened_url)
     });
   } else {
     res.json({ error: "invalid url" });
@@ -44,6 +45,7 @@ const shortenedUrl = (req, res,next) => {
   next()
   console.log(urlToForward)
   const short_url = `https://short-url-mic-fcc.herokuapp.com/${urlToForward}`;
+  console.log(short_url)
   UrlToShort.findOne({ 'shortened_url': short_url }, (err, data) => {
     if (err) {
       res.json(err);
