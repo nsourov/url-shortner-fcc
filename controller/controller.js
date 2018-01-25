@@ -6,20 +6,20 @@ const urlToShort = (req, res) => {
   const regexForCheckValidUrl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   if (regexForCheckValidUrl.test(urlToShort)) {
     const randomNum = Math.floor(Math.random() * 1000).toString();
-    // const short_url = `https://short-url-mic-fcc.herokuapp.com/${randomNum}`;
+    const short_url = `https://short-url-mic-fcc.herokuapp.com/${randomNum}`;
     let objModel = {
       original_url: "",
       shortened_url: ""
     };
     let newUrl = new UrlToShort({
       original_url: urlToShort,
-      shortened_url: randomNum
+      shortened_url: short_url
     });
     const checkForhttp = new RegExp("^(http||https)://", "i");
     if (checkForhttp.test(urlToShort) === false) {
       newUrl = new UrlToShort({
         original_url: `http://${urlToShort}`,
-        shortened_url: randomNum
+        shortened_url: short_url
       });
     }
     newUrl.save((err, url) => {
@@ -40,12 +40,12 @@ const urlToShort = (req, res) => {
 const shortenedUrl = async (req, res) => {
   const { urlToForward } = await req.params;
   console.log(req.params)
-  // const short_url = `https://short-url-mic-fcc.herokuapp.com/${urlToForward}`;
- await UrlToShort.findOne({ 'shortened_url': urlToForward }, (err, data) => {
+  const short_url = `https://short-url-mic-fcc.herokuapp.com/${urlToForward}`;
+ await UrlToShort.findOne({ 'shortened_url': short_url }, (err, data) => {
     if (err) {
-      res.send(err);
+      res.json(err);
     }
-  res.redirect(301, data.original_url);
+   res.redirect(301, data.original_url);
   });
 };
 
