@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const UrlToShort = require("../models/short_url");
 
 const urlToShort = (req, res, next) => {
-  return res.header("Access-Control-Allow-Origin", "*")
   const urlToShort = req.params[0];
   next()
   console.log(req.params)
