@@ -6,7 +6,7 @@ const urlToShort = (req, res) => {
   const regexForCheckValidUrl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   if (regexForCheckValidUrl.test(urlToShort)) {
     const randomNum = Math.floor(Math.random() * 1000).toString();
-    const short_url = `${req.protocol}://${req.get("host")}/${randomNum}`;
+    const short_url = `https://short-url-mic-fcc.herokuapp.com/${randomNum}`;
     let objModel = {
       original_url: "",
       shortened_url: ""
@@ -39,7 +39,8 @@ const urlToShort = (req, res) => {
 
 const shortenedUrl = (req, res) => {
   const { shortened_url } = req.params;
-  const short_url = `${req.protocol}://${req.get("host")}/${shortened_url}`;
+  const short_url = `https://short-url-mic-fcc.herokuapp.com/${shortened_url}`;
+  console.log(short_url)
   UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
     if (err) {
       res.json(err);
