@@ -37,17 +37,17 @@ const urlToShort = (req, res) => {
   }
 };
 
-const shortenedUrl = (req, res,next) => {
+const shortenedUrl = (req, res, next) => {
   const { shortened_url } = req.params;
-  next()
-  consoole.log(shortened_url)
   const short_url = `${req.protocol}://${req.get("host")}/${shortened_url}`;
   UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
     if (err) {
       return res.json(err);
+    }else{
+      return res.redirect(data.original_url);
+      next()
     }
-   return res.redirect(data.original_url);
   });
 };
 
-module.exports = {urlToShort, shortenedUrl}
+module.exports = { urlToShort, shortenedUrl };
