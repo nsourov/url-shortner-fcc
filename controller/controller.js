@@ -37,12 +37,12 @@ const urlToShort = (req, res) => {
   }
 };
 
-const shortenedUrl = async (req, res) => {
-  const { shortened_url } = await req.params;
-  console.log({"a": shortened_url})
+const shortenedUrl = (req, res) => {
+  const { shortened_url } = req.params;
+  console.log(req.params)
   const short_url = `https://short-url-mic-fcc.herokuapp.com/${shortened_url}`;
   console.log({"b": short_url})
- await UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
+  UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
     if (err) {
       res.json(err);
     }
