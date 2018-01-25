@@ -43,7 +43,7 @@ const shortenedUrl = async (req, res) => {
   const short_url = `https://short-url-mic-fcc.herokuapp.com/${urlToForward}`;
  await UrlToShort.findOne({ 'shortened_url': short_url }, (err, data) => {
     if (err) {
-      res.json(err);
+      res.send(err);
     }
   res.redirect(301, data.original_url);
   });
