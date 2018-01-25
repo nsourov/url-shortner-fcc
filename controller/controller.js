@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const UrlToShort = require("../models/short_url");
 
 const urlToShort = (req, res, next) => {
-  const {urlToShort} = req.params;
+  const urlToShort = req.params[0];
+  next()
   const regexForCheckValidUrl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   if (regexForCheckValidUrl.test(urlToShort)) {
     const randomNum = Math.floor(Math.random() * 1000).toString();
@@ -35,7 +36,6 @@ const urlToShort = (req, res, next) => {
   } else {
     res.json({ error: "invalid url" });
   }
-  next()
 };
 
 const shortenedUrl = (req, res,next) => {
@@ -48,7 +48,6 @@ const shortenedUrl = (req, res,next) => {
     }
    res.redirect(301, data.original_url);
   });
-  next()
 };
 
 module.exports = {urlToShort, shortenedUrl}
