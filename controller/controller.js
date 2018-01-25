@@ -4,6 +4,7 @@ const UrlToShort = require("../models/short_url");
 const urlToShort = (req, res, next) => {
   const urlToShort = req.params[0];
   next()
+  console.log(req.params)
   const regexForCheckValidUrl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   if (regexForCheckValidUrl.test(urlToShort)) {
     const randomNum = Math.floor(Math.random() * 1000).toString();
