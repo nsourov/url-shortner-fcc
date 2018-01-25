@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const UrlToShort = require("../models/short_url");
 
 const urlToShort = (req, res) => {
-  const urlToShort = req.params[0];
+  const {urlToShort} = req.params;
   const regexForCheckValidUrl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   if (regexForCheckValidUrl.test(urlToShort)) {
     const randomNum = Math.floor(Math.random() * 1000).toString();
@@ -38,15 +38,15 @@ const urlToShort = (req, res) => {
 };
 
 const shortenedUrl = (req, res) => {
-  const { shortened_url } = req.params;
-  console.log(req.params[0])
-  const short_url = `https://short-url-mic-fcc.herokuapp.com/${shortened_url}`;
+  const { urlToForward } = req.params;
+  console.log(req.params)
+  const short_url = `https://short-url-mic-fcc.herokuapp.com/${urlToForward}`;
   console.log({"b": short_url})
-  UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
+  UrlToShort.findOne({ 'shortened_url': short_url }, (err, data) => {
     if (err) {
       res.json(err);
     }
-    res.redirect(data.original_url);
+    res.redirect(301, data.original_url);
   });
 };
 
