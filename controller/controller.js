@@ -39,7 +39,8 @@ const urlToShort = (req, res, next) => {
 };
 
 const shortenedUrl = (req, res,next) => {
-  const { urlToForward } = req.params;
+  const splited = req.params[0].split('/')
+  const urlToForward = splited[1]
   next()
   console.log(req.params)
   const short_url = `https://short-url-mic-fcc.herokuapp.com/${urlToForward}`;
