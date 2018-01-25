@@ -50,4 +50,4 @@ const urlToShort = (req, res) => {
 //   });
 // };
 
-module.exports = {urlToShort, shortenedUrl}
+module.exports = {urlToShort}
