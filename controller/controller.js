@@ -37,8 +37,9 @@ const urlToShort = (req, res) => {
   }
 };
 
-const shortenedUrl = (req, res) => {
+const shortenedUrl = (req, res,next) => {
   const { shortened_url } = req.params;
+  next()
   const short_url = `${req.protocol}://${req.get("host")}/${shortened_url}`;
   UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
     if (err) {
