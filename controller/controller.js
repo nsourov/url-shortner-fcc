@@ -45,7 +45,7 @@ const shortenedUrl = async (req, res) => {
     if (err) {
       res.json(err);
     }
-  await res.redirect(301, data.original_url);
+  res.redirect(301, data.original_url);
   });
 };
 
