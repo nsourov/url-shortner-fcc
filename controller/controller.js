@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const UrlToShort = require("../models/short_url");
 
 const urlToShort = (req, res, next) => {
+  return res.header("Access-Control-Allow-Origin", "*")
   const urlToShort = req.params[0];
   next()
   console.log(req.params)
@@ -26,17 +27,17 @@ const urlToShort = (req, res, next) => {
     }
     newUrl.save((err, url) => {
       if (err) {
-        res.json(err);
+        return res.json(err);
       }
       objModel = {
         original_url: url.original_url,
         shortened_url: url.shortened_url
       };
-      res.json(objModel);
+     return res.json(objModel);
       console.log(objModel.shortened_url)
     });
   } else {
-    res.json({ error: "invalid url" });
+    return res.json({ error: "invalid url" });
   }
 };
 
