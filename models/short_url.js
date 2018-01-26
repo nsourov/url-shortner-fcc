@@ -4,4 +4,4 @@ const urlToShort = new mongoose.Schema({
     shortened_url : String
 })
 
-module.exports = mongoose.model('UrlToShort', urlToShort)
+module.exports = mongoose.model('Url', urlToShort)

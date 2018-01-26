@@ -1,53 +1,44 @@
 const mongoose = require("mongoose");
-const UrlToShort = require("../models/short_url");
+const Url = require("../models/short_url");
 
-const urlToShort = (req, res) => {
-  const urlToShort = req.params[0];
-  const regexForCheckValidUrl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
-  if (regexForCheckValidUrl.test(urlToShort)) {
-    const randomNum = Math.floor(Math.random() * 1000).toString();
-    const short_url = `${req.protocol}://${req.get("host")}/${randomNum}`;
-    let objModel = {
-      original_url: "",
-      shortened_url: ""
-    };
-    let newUrl = new UrlToShort({
-      original_url: urlToShort,
-      shortened_url: short_url
-    });
-    const checkForhttp = new RegExp("^(http||https)://", "i");
-    if (checkForhttp.test(urlToShort) === false) {
-      newUrl = new UrlToShort({
-        original_url: `http://${urlToShort}`,
-        shortened_url: short_url
-      });
+const allUrl = async (req,res) => {
+ await Url.find({},(err,result) => {
+    if(err){
+      console.log(err)
     }
-    newUrl.save((err, url) => {
-      if (err) {
-        res.json(err);
+    res.json(result)
+  })
+}
+
+const urlToShort = async (req, res) => {
+  const original_url = req.params[0].match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)
+    const randNum = Math.floor(Math.random() * 1000).toString()
+    const shortened_url  = `${req.protocol}://${req.hostname}/${randNum}`
+    const newUrl = await new Url({original_url:original_url[0],shortened_url});
+    newUrl.save()
+    const resJson = {original_url:newUrl.original_url,shortened_url:newUrl.shortened_url}
+    res.json(resJson)
+}
+
+const shortenedUrl = async (req, res) => {
+  const {urlId} = req.params;
+  const shortened_url  = `${req.protocol}://${req.hostname}/${urlId}`
+  await Url.find({shortened_url}, (err, result) => {
+    if(err){
+      console.log(err)
+    } else{
+      const url = result.map(url => url.original_url)[0]
+      const checkForhttp = new RegExp("^(http||https)://", "i");
+      if(checkForhttp.test(url)){
+       console.log("http")
+        res.redirect(url)
+      }else{
+        console.log('not http')
+        res.redirect(`http://${url}`)
       }
-      objModel = {
-        original_url: url.original_url,
-        shortened_url: url.shortened_url
-      };
-      res.json(objModel);
-    });
-  } else {
-    res.json({ error: "invalid url" });
-  }
-};
-
-const shortenedUrl = (req, res, next) => {
-  const { shortened_url } = req.params;
-  const short_url = `${req.protocol}://${req.get("host")}/${shortened_url}`;
-  UrlToShort.findOne({ shortened_url: short_url }, (err, data) => {
-    if (err) {
-      return res.json(err);
-    }else{
-      return res.redirect(data.original_url);
-      next()
+      // res.redirect(301, url)
     }
-  });
+  })
 };
 
-module.exports = { urlToShort, shortenedUrl };
+module.exports = { allUrl, urlToShort, shortenedUrl };
